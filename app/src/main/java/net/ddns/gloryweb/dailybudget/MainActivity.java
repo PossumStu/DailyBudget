@@ -18,7 +18,7 @@ import android.widget.TextView;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-//    File budgetData = new File(context.getFilesDir(), dailybudgetdata);
+    //    File budgetData = new File(context.getFilesDir(), dailybudgetdata);
     public float allowance;// = 29.00f;
     private float curBal;
     private float transactionVal;
@@ -34,19 +34,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        }
+    }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
 
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         Intent intent = new Intent(this, WidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -61,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
         setContentView(R.layout.activity_main);
@@ -90,18 +87,16 @@ public class MainActivity extends AppCompatActivity {
         int cDate = Integer.parseInt(date);
         int pDate = Integer.parseInt(prevDate);
 
-        if(cDate > pDate){
-            float bankBal = sharedPreferences.getFloat("bankBal",0);
+        if (cDate > pDate) {
+            float bankBal = sharedPreferences.getFloat("bankBal", 0);
             float curBal = sharedPreferences.getFloat("curBal", allowance);
-            float newBal = (bankBal + curBal) + ((cDate-pDate-1) * allowance);
+            float newBal = (bankBal + curBal) + ((cDate - pDate - 1) * allowance);
             editor.putFloat("bankBal", newBal);
             editor.putFloat("curBal", allowance);
             editor.putString("todayTrans", "Transactions: ");
             editor.commit();
-        }
-
-        else if (pDate > cDate){
-            float bankBal = sharedPreferences.getFloat("bankBal",0);
+        } else if (pDate > cDate) {
+            float bankBal = sharedPreferences.getFloat("bankBal", 0);
             float curBal = sharedPreferences.getFloat("curBal", allowance);
             float newBal = (bankBal + curBal);
             editor.putFloat("bankBal", newBal);
@@ -113,13 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putString("prevDate", date);
         editor.commit();
-        bankBal.setText("$" + String.format("%.2f", sharedPreferences.getFloat("bankBal",0)));
+        bankBal.setText("$" + String.format("%.2f", sharedPreferences.getFloat("bankBal", 0)));
         dailyBal.setText("$" + String.format("%.2f", sharedPreferences.getFloat("curBal", allowance)));
-        dailyAllowance.setText("$" +  String.format("%.2f", sharedPreferences.getFloat("allowance", allowance)));
-        lastTrans.setText("$" +  String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
+        dailyAllowance.setText("$" + String.format("%.2f", sharedPreferences.getFloat("allowance", allowance)));
+        lastTrans.setText("$" + String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
 
     }
-
 
 
     public void transact(View view) {
@@ -145,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
         //takes input field and uses it to adjust daily balance
 
         if (message.equals("")) {
-            return;}
-        else{
+            return;
+        } else {
             transactionVal = Float.parseFloat(message);
 
             todayTrans = sharedPreferences.getString("todayTrans", "Transactions: ");
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
             editor.putFloat("lastTransaction", transactionVal);
             editor.commit();
-            lastTrans.setText("$" +  String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
+            lastTrans.setText("$" + String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
 
             //System.out.println(sharedPreferences.getString("todayTrans", null));
 
@@ -168,10 +162,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         editor.putFloat("curBal", curBal);
         editor.commit();
-
 
 
     }
@@ -199,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void settings(View view){
+    public void settings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
 

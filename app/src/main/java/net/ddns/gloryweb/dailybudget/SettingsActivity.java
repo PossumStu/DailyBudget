@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
     public float allowance;
@@ -22,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setAllowance(View view) {
-        EditText editText = (EditText) findViewById(R.id.dailyAllowanceSet);
+        EditText editText = findViewById(R.id.dailyAllowanceSet);
         String message = editText.getText().toString();
 
         //get shared prefs
@@ -39,8 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
         //takes input field and uses it to set new allowance
 
         if (message.equals("")) {
-            return;}
-        else{
+            return;
+        } else {
             allowance = Float.parseFloat(message);
             editor.putFloat("allowance", allowance);
             editor.putFloat("curBal", allowance);
@@ -50,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setBankBal(View view) {
-        EditText editText = (EditText) findViewById(R.id.setBankBal);
+        EditText editText = findViewById(R.id.setBankBal);
         String message = editText.getText().toString();
 
         //get shared prefs
@@ -67,8 +66,8 @@ public class SettingsActivity extends AppCompatActivity {
         //takes input field and uses it to override bank balance
 
         if (message.equals("")) {
-            return;}
-        else{
+            return;
+        } else {
             newBankBal = Float.parseFloat(message);
             editor.putFloat("bankBal", newBankBal);
             editText.getText().clear();

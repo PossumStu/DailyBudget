@@ -8,16 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import java.util.Date;
-import java.util.Random;
-
 
 
 public class WidgetProvider extends AppWidgetProvider {
     public float allowance;
     public float curBal;
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
@@ -35,17 +33,15 @@ public class WidgetProvider extends AppWidgetProvider {
         int cDate = Integer.parseInt(date);
         int pDate = Integer.parseInt(prevDate);
 
-        if(cDate > pDate){
-            float bankBal = sharedPreferences.getFloat("bankBal",0);
+        if (cDate > pDate) {
+            float bankBal = sharedPreferences.getFloat("bankBal", 0);
             float curBal = sharedPreferences.getFloat("curBal", allowance);
-            float newBal = (bankBal + curBal) + ((cDate-pDate-1) * allowance);
+            float newBal = (bankBal + curBal) + ((cDate - pDate - 1) * allowance);
             editor.putFloat("bankBal", newBal);
             editor.putFloat("curBal", allowance);
             editor.commit();
-        }
-
-        else if (pDate > cDate){
-            float bankBal = sharedPreferences.getFloat("bankBal",0);
+        } else if (pDate > cDate) {
+            float bankBal = sharedPreferences.getFloat("bankBal", 0);
             float curBal = sharedPreferences.getFloat("curBal", allowance);
             float newBal = (bankBal + curBal);
             editor.putFloat("bankBal", newBal);
@@ -86,11 +82,10 @@ public class WidgetProvider extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(widgetId, remoteViews1);
 
 
-
         }
     }
 
-    public void update(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
+    public void update(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
         final int count = appWidgetIds.length;
         SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -117,14 +112,12 @@ public class WidgetProvider extends AppWidgetProvider {
             remoteViews1.setTextViewText(R.id.textView6, "Bank:" + newline + "$" + String.format("%.2f", bankBal));
 
 
-
             Intent intent = new Intent(context, WidgetProvider.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
             //PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             //remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, remoteViews1);
-
 
 
         }
