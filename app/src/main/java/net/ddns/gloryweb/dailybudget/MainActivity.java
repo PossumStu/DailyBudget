@@ -5,22 +5,17 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.Date;
-
-import static java.lang.Boolean.TRUE;
 
 public class MainActivity extends AppCompatActivity {
 //    File budgetData = new File(context.getFilesDir(), dailybudgetdata);
@@ -32,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView bankBal;
     private TextView dailyAllowance;
     private TextView lastTrans;
+    private TextView dayTrans;
+    private String lastStr;
+    private String todayTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     {
         // TODO Auto-generated method stub
         super.onStart();
+
     }
 
     @Override
@@ -67,17 +66,22 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onResume();
         setContentView(R.layout.activity_main);
-        dailyBal = (TextView) findViewById(R.id.dailyBal);
-        bankBal = (TextView) findViewById(R.id.bankBal);
-        dailyAllowance = (TextView) findViewById(R.id.dailyAllowance);
-        lastTrans = (TextView) findViewById(R.id.lastTrans);
-
+        dailyBal = findViewById(R.id.dailyBal);
+        bankBal = findViewById(R.id.bankBal);
+        dailyAllowance = findViewById(R.id.dailyAllowance);
+        lastTrans = findViewById(R.id.lastTrans);
         //Get shared prefs
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         allowance = sharedPreferences.getFloat("allowance", 0);
         curBal = sharedPreferences.getFloat("curBal", allowance);
         lastTransaction = sharedPreferences.getFloat("lastTransaction", 0);
+
+        //////////////
+        //INIT STUFF//
+        //////////////
+        //editor.putString("todayTrans", "Transactions: ");
+        //editor.commit();
 
         //compare dates
         Date date1 = new Date();
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             float newBal = (bankBal + curBal) + ((cDate-pDate-1) * allowance);
             editor.putFloat("bankBal", newBal);
             editor.putFloat("curBal", allowance);
+            editor.putString("todayTrans", "Transactions: ");
             editor.commit();
         }
 
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             float newBal = (bankBal + curBal);
             editor.putFloat("bankBal", newBal);
             editor.putFloat("curBal", allowance);
+            editor.putString("todayTrans", "Transactions: ");
             editor.commit();
         }
 
@@ -117,11 +123,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void transact(View view) {
-        EditText editText = (EditText) findViewById(R.id.transaction);
+        EditText editText = findViewById(R.id.transaction);
         String message = editText.getText().toString();
 
         //sets Last Transaction text view
-        lastTrans = (TextView) findViewById(R.id.lastTrans);
+        lastTrans = findViewById(R.id.lastTrans);
+        dayTrans = findViewById(R.id.dayTrans);
 
         //get shared prefs
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -141,9 +148,18 @@ public class MainActivity extends AppCompatActivity {
             return;}
         else{
             transactionVal = Float.parseFloat(message);
+
+            todayTrans = sharedPreferences.getString("todayTrans", "Transactions: ");
+            todayTrans = todayTrans.concat("$" + String.format("%.2f", transactionVal) + ", ");
+            editor.putString("todayTrans", todayTrans);
+            dayTrans.setText(todayTrans);
+
             editor.putFloat("lastTransaction", transactionVal);
             editor.commit();
             lastTrans.setText("$" +  String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
+
+            //System.out.println(sharedPreferences.getString("todayTrans", null));
+
             curBal = curBal - transactionVal;
             if (dailyBal != null) {
                 dailyBal.setText("$" + String.format("%.2f", curBal));
