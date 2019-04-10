@@ -67,12 +67,14 @@ public class MainActivity extends AppCompatActivity {
         bankBal = findViewById(R.id.bankBal);
         dailyAllowance = findViewById(R.id.dailyAllowance);
         lastTrans = findViewById(R.id.lastTrans);
+        dayTrans = findViewById(R.id.dayTrans);
         //Get shared prefs
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         allowance = sharedPreferences.getFloat("allowance", 0);
         curBal = sharedPreferences.getFloat("curBal", allowance);
         lastTransaction = sharedPreferences.getFloat("lastTransaction", 0);
+        todayTrans = sharedPreferences.getString("todayTrans", "Transactions: ");
 
         //////////////
         //INIT STUFF//
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         dailyBal.setText("$" + String.format("%.2f", sharedPreferences.getFloat("curBal", allowance)));
         dailyAllowance.setText("$" + String.format("%.2f", sharedPreferences.getFloat("allowance", allowance)));
         lastTrans.setText("$" + String.format("%.2f", sharedPreferences.getFloat("lastTransaction", 0)));
-
+        dayTrans.setText(todayTrans);
     }
 
 
